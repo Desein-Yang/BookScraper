@@ -13,12 +13,12 @@ class ChildBookSpider(Spider):
         bs4_res = self.bs4_parse(rooturl,decode_style="utf8")
         mulu = bs4_res.find_all("h2",class_="entry-title")
         for h2 in mulu:
-            link = str(h2.find_all("a")[0]).split("\"")[1]
+            link = h2.find("a")["href"]
             wait_list.append(link)
         return wait_list
 
     def get_page(self,res):
-        title = res.find_all("h1",class_="entry-title")[0].text
+        title = res.find("h1",class_="entry-title").text
         contents = []
         content_divs = res.find_all("div",class_="entry-content")
         for div in content_divs:

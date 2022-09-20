@@ -8,6 +8,7 @@ from  bs4 import BeautifulSoup
 from collections import deque
 import requests
 
+requests.adapters.DEAULT_RETRIES = 5 
 class Spider(object):
     def __init__(self, log_dir="./") -> None:
         self.log_dir = log_dir
@@ -16,8 +17,7 @@ class Spider(object):
         
     def init_rand_header(self):
         #ua = UserAgent(use_cache_server=False)
-        ua = UserAgent()
-        self.headers = {'User-Agent': ua.random}
+        self.ua = UserAgent()
 
     def init_wait_list(self, rooturl:str, urlfile:str):
         wait_list = deque()#FIFO queue
@@ -26,7 +26,8 @@ class Spider(object):
         raise NotImplementedError
 
     def bs4_parse(self,url,decode_style="GBK"):
-        res = requests.get(url=url, headers=self.headers)
+        headers = {'User-Agent': self.ua.random}
+        res = requests.get(url=url, headers=headers)
 
         if res.status_code == 200:
             try:
@@ -39,7 +40,8 @@ class Spider(object):
         else:
             self.failure.append(url)
             raise requests.exceptions.ConnectionError
-        
+        # except requests.exceptions.ConnectionError:
+        #     res.status_code = "Connection refused"  
         return bs4_res
 
     def get_content(self, url:str, tgtkeys:list):
@@ -60,4 +62,7 @@ class Spider(object):
     def run(self):
         pass
 
+    def sleep(self,n):
+        import time
+        time.sleep(n)
 
