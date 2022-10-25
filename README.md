@@ -12,7 +12,7 @@ python book_spider.py
 
 - Encapsulated Modules: Wrap basic module in spider.py (e.g., html parse(bs4), save content(json), random user agent(USAgent))
 - Cutomized Modules: Customize function in subclass (e.g., init_wait_list, get_content, run)
-- EXamples: Several examples to carwl datasets or book txt.
+- EXamples: Several examples to carwl datasets or book txt, or huggingface websites.
 - Dataset/Rooturl: support load url list from file (dataset_spider.py) or parse from root url(book_spider.py)
 
 
