@@ -59,8 +59,20 @@ class Spider(object):
             },fout,ensure_ascii=False)
         fout.write("\n")
 
-    def run(self):
-        pass
+    def run(self,rooturl):
+        waitlist = self.init_wait_list(rooturl)
+        idx = 0
+        while waitlist:
+            url = waitlist.popleft()
+            res = self.bs4_parse(url,decode_style="utf8")
+            output_each = self.get_page(res)
+            output_each["idx"]=idx
+            output_each["url"]=url
+            idx += 1
+            self.save_content(output_each,savefile)
+
+        if self.failure:
+            self.save_content({"failure":self.failure},savefile)
 
     def sleep(self,n):
         import time
